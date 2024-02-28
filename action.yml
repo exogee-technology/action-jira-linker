@@ -1,0 +1,27 @@
+name: 'action-jira-linker'
+description: 'Add JIRA issue details to your GitHub pull request.'
+author: 'thekevinbrown'
+inputs:
+  github-token:
+    description: 'Token used to update PR description and add labels. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
+    required: true
+  jira-user:
+    description: 'JIRA username (email address) of the user that created the token. Can be passed in using {{ secrets.JIRA_USER }}'
+    required: true
+  jira-token:
+    description: 'API Token used to access the JIRA REST API. Must have read access to your JIRA Projects & Issues.'
+    required: true
+  jira-base-url:
+    description: 'The subdomain of JIRA cloud that you use to access it. Ex: "https://your-domain.atlassian.net"'
+    required: true
+  fail-on-error:
+    description: 'Set this to true if you want action-jira-linker to fail the PR if it cannot find a JIRA issue. Default is false.'
+    required: false
+    default: false
+
+runs:
+  using: 'node20'
+  main: 'lib/index.js'
+branding:
+  icon: 'check-square'
+  color: 'blue'
