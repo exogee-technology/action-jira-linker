@@ -34,5 +34,5 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Build CLI tool
+      - name: Build Action
         run: pnpm build
