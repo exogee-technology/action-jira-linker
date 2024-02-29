@@ -18,7 +18,7 @@ jobs:
   action-jira-linter:
     runs-on: ubuntu-latest
     steps:
-      - uses: exogee-technology/action-jira-linker@1.0.0
+      - uses: exogee-technology/action-jira-linker@v1.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-user: ${{ secrets.JIRA_USER }}
