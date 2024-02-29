@@ -11,8 +11,14 @@ const run = async () => {
 		const jiraToken: string = core.getInput('jira-token', { required: true });
 		const jiraBaseURL: string = core.getInput('jira-base-url', { required: true });
 		const githubToken: string = core.getInput('github-token', { required: true });
-		const commentHeader: string = core.getInput('comment-header', { required: false });
-		const commentTrailer: string = core.getInput('comment-trailer', { required: false });
+		const commentHeader: string = core.getInput('comment-header', {
+			trimWhitespace: false,
+			required: false,
+		});
+		const commentTrailer: string = core.getInput('comment-trailer', {
+			trimWhitespace: false,
+			required: false,
+		});
 		const failOnError: boolean = core.getInput('fail-on-error', { required: false }) !== 'false';
 
 		const exit = (message: string): void => {
