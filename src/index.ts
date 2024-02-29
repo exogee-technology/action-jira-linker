@@ -1,11 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-import {
-	CreateIssueCommentParams,
-	GithubPullRequestParams,
-	GithubUpdateIssueParams,
-} from './types';
+import { GithubPullRequestParams, GithubUpdateIssueParams } from './types';
 import { GitHub } from './github';
 import { Jira } from './jira';
 
@@ -15,6 +11,8 @@ const run = async () => {
 		const jiraToken: string = core.getInput('jira-token', { required: true });
 		const jiraBaseURL: string = core.getInput('jira-base-url', { required: true });
 		const githubToken: string = core.getInput('github-token', { required: true });
+		const commentHeader: string = core.getInput('comment-header', { required: false });
+		const commentTrailer: string = core.getInput('comment-trailer', { required: false });
 		const failOnError: boolean = core.getInput('fail-on-error', { required: false }) !== 'false';
 
 		const exit = (message: string): void => {
@@ -65,12 +63,10 @@ const run = async () => {
 		const jira = new Jira(jiraBaseURL, jiraUser, jiraToken);
 
 		if (!headBranch && !baseBranch) {
-			const commentBody = 'action-jira-linker is unable to determine the head and base branch.';
-			const comment: CreateIssueCommentParams = {
+			await gh.addComment({
 				...commonPayload,
-				body: commentBody,
-			};
-			await gh.addComment(comment);
+				body: 'action-jira-linker is unable to determine the head and base branch.',
+			});
 
 			return exit('Unable to get the head and base branch.');
 		}
@@ -92,7 +88,7 @@ const run = async () => {
 			console.log('Adding link comment for issue');
 			await gh.addComment({
 				...commonPayload,
-				body: `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})`,
+				body: commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
 			});
 		} else {
 			return exit(

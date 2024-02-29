@@ -14,6 +14,14 @@ inputs:
   jira-base-url:
     description: 'The subdomain of JIRA cloud that you use to access it. Ex: "https://your-domain.atlassian.net"'
     required: true
+  comment-header:
+    description: 'A message that will be added to the top of the PR comment in markdown format. Default is "".'
+    required: false
+    default: ''
+  comment-trailer:
+    description: 'A message that will be added to the bottom of the PR comment in markdown format. Default is "".'
+    required: false
+    default: ''
   fail-on-error:
     description: 'Set this to true if you want action-jira-linker to fail the PR if it cannot find a JIRA issue. Default is false.'
     required: false

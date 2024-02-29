@@ -23,10 +23,6 @@ export interface GithubPullRequestParams {
 	[key: string]: unknown;
 }
 
-export interface CreateIssueCommentParams extends GithubUpdateIssueParams {
-	body: string;
-}
-
 export interface JiraIssueStatus {
 	self: string;
 	description: string;

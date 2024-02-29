@@ -44,16 +44,24 @@ A full example with all available options and example values is provided below.
     jira-user: ${{ secrets.JIRA_USER }}
     jira-token: ${{ secrets.JIRA_TOKEN }}
     jira-base-url: https://your-domain.atlassian.net
+    comment-header: |
+      ## JIRA Information
+      ---
+      Stuff and things
+    comment-trailer: |
+      If you cannot access the link above contact [admin@testcompany.com](mailto:admin@testcompany.com) for more information.
     fail-on-error: true
 ```
 
-| Key             | Description                                                                                                                                                             | Required | Default |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- |
-| `github-token`  | Token used to update PR description. `GITHUB_TOKEN` is already available [when you use GitHub actions][ghtoken], so all that is required is to pass it as a param here. | x        | `null`  |
-| `jira-token`    | Token used to fetch Jira Issue information. Check [below](#jira-token) for more details on how to generate the token.                                                   | x        | `null`  |
-| `jira-user`     | The email address of the user that generated the `jira-token`.                                                                                                          | x        | `null`  |
-| `jira-base-url` | The subdomain of JIRA cloud that you use to access it. Ex: `https://your-domain.atlassian.net`.                                                                         | x        | `null`  |
-| `fail-on-error` | A `Boolean` which, if set to `true`, fails the GitHub Action when an error occurs. Default `true`.                                                                      |          | `false` |
+| Key               | Description                                                                                                                                                             | Required | Default |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- |
+| `github-token`    | Token used to update PR description. `GITHUB_TOKEN` is already available [when you use GitHub actions][ghtoken], so all that is required is to pass it as a param here. | x        | `null`  |
+| `jira-token`      | Token used to fetch Jira Issue information. Check [below](#jira-token) for more details on how to generate the token.                                                   | x        | `null`  |
+| `jira-user`       | The email address of the user that generated the `jira-token`.                                                                                                          | x        | `null`  |
+| `jira-base-url`   | The subdomain of JIRA cloud that you use to access it. Ex: `https://your-domain.atlassian.net`.                                                                         | x        | `null`  |
+| `comment-header`  | A markdown formatted message which will get added to top of the comments the bot makes.                                                                                 |          | `''`    |
+| `comment-trailer` | A markdown formatted message which will get added to bottom of the comments the bot makes.                                                                              |          | `''`    |
+| `fail-on-error`   | A `Boolean` which, if set to `true`, fails the GitHub Action when an error occurs.                                                                                      |          | `false` |
 
 **Special note on `jira-token`:** Since tokens are private, we suggest adding
 them as [GitHub secrets][secrets].
