@@ -82,7 +82,8 @@ const run = async () => {
 
 		const issueKeys = Jira.getJIRAIssueKeys(headBranch);
 		if (!issueKeys.length) {
-			return exit('JIRA issue id is missing in your branch.');
+			console.log(`Could not find a JIRA issue key in your branch name. Skipping.`);
+			return;
 		}
 
 		// use the last match (end of the branch name)
@@ -97,9 +98,10 @@ const run = async () => {
 				body: commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
 			});
 		} else {
-			return exit(
-				`Could not find JIRA issue for key ${issueKey}. Please create a branch with a valid JIRA issue key.`
-			);
+			if (!issueKeys.length) {
+				console.log(`Could not find JIRA issue for key ${issueKey}. Skipping.`);
+				return;
+			}
 		}
 	} catch (error) {
 		console.log({ error });
