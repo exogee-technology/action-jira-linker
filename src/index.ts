@@ -90,9 +90,18 @@ const run = async () => {
 		const issueKey = issueKeys[issueKeys.length - 1];
 		console.log(`JIRA key -> ${issueKey}`);
 
-		const { key } = await jira.getIssue(issueKey);
+		let key = '';
+
+		try {
+			key = (await jira.getIssue(issueKey)).key;
+		} catch (error) {
+			console.error(`Error while retrieving issue with key ${issueKey} from JIRA: `, error);
+			console.log('Skipping.');
+			return;
+		}
+
 		if (key) {
-			console.log('Adding link comment for issue');
+			console.log('Successfully retrieved issue from JIRA. Adding link comment for issue.');
 			await gh.addComment({
 				...commonPayload,
 				body: commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
