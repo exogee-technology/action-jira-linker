@@ -21,6 +21,7 @@ const run = async () => {
 		});
 		const failOnError: boolean = core.getInput('fail-on-error', { required: false }) !== 'false';
 		const forceUpdate: boolean = core.getInput('force-update', { required: false }) === 'true';
+		const updateBody: boolean = core.getInput('update-body', { required: false }) === 'true';
 
 		const exit = (message: string): void => {
 			let exitCode = 0;
@@ -70,10 +71,12 @@ const run = async () => {
 		const jira = new Jira(jiraBaseURL, jiraUser, jiraToken);
 
 		if (!headBranch && !baseBranch) {
-			await gh.addComment({
-				...commonPayload,
-				body: 'action-jira-linker is unable to determine the head and base branch.',
-			});
+			if (!updateBody) {
+				await gh.addComment({
+					...commonPayload,
+					body: 'action-jira-linker is unable to determine the head and base branch.',
+				});
+			}
 
 			return exit('Unable to get the head and base branch.');
 		}
@@ -102,11 +105,21 @@ const run = async () => {
 		}
 
 		if (key) {
-			console.log('Successfully retrieved issue from JIRA. Adding link comment for issue.');
-			await gh.addComment({
-				...commonPayload,
-				body: commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
-			});
+			if (updateBody) {
+				console.log('Successfully retrieved issue from JIRA. Adding link to body of issue.');
+				await gh.updateBody({
+					...commonPayload,
+					body:
+						commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
+				});
+			} else {
+				console.log('Successfully retrieved issue from JIRA. Adding link comment for issue.');
+				await gh.addComment({
+					...commonPayload,
+					body:
+						commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
+				});
+			}
 		} else {
 			if (!issueKeys.length) {
 				console.log(`Could not find JIRA issue for key ${issueKey}. Skipping.`);

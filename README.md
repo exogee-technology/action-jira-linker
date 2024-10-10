@@ -64,6 +64,7 @@ A full example with all available options and example values is provided below.
 | `comment-trailer` | A markdown formatted message which will get added to bottom of the comments the bot makes.                                                                              |          | `''`    |
 | `fail-on-error`   | A `Boolean` which, if set to `true`, fails the GitHub Action when an error occurs.                                                                                      |          | `false` |
 | `force-update`    | A `Boolean` which, if set to `true`, allows the update to be made after the issue has already been opened which may result in creating multiple comments.               |          | `false` |
+| `update-body`     | A `Boolean` which, if set to `true`, prepends the comment to the body instead of adding a comment to the issue.                                                         |          | `false` |
 
 **Special note on `jira-token`:** Since tokens are private, we suggest adding
 them as [GitHub secrets][secrets].
