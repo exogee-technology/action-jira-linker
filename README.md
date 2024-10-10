@@ -16,6 +16,7 @@ on: [pull_request]
 
 jobs:
   action-jira-linter:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - uses: exogee-technology/action-jira-linker@v1.0.0
