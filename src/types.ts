@@ -76,3 +76,10 @@ export interface JiraIssue {
 		[k: string]: unknown;
 	};
 }
+
+export interface CreateIssueCommentParams {
+	owner: string;
+	repo: string;
+	issue: number;
+	body: string;
+}
