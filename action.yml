@@ -26,6 +26,10 @@ inputs:
     description: 'Set this to true if you want action-jira-linker to fail the PR if it cannot find a JIRA issue. Default is false.'
     required: false
     default: false
+  force-update:
+    description: 'Set this to true if you want action-jira-linker to add the comment for PRs that have not been recently opened at the risk of creating duplicate comments, this can be useful while testing the action integration.'
+    required: false
+    default: false
 
 runs:
   using: 'node20'

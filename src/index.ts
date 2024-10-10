@@ -20,6 +20,7 @@ const run = async () => {
 			required: false,
 		});
 		const failOnError: boolean = core.getInput('fail-on-error', { required: false }) !== 'false';
+		const forceUpdate: boolean = core.getInput('force-update', { required: false }) === 'true';
 
 		const exit = (message: string): void => {
 			let exitCode = 0;
@@ -47,7 +48,7 @@ const run = async () => {
 			return;
 		}
 
-		if (action !== 'opened') {
+		if (!forceUpdate && action !== 'opened') {
 			console.log('Skipping action to ensure we only comment once.');
 			return;
 		}
