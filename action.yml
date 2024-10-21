@@ -34,6 +34,14 @@ inputs:
     description: 'Update the issue body with the comment instead of adding a comment'
     required: false
     default: false
+  include-title:
+    description: 'Add jira ticket summary to generated link'
+    required: false
+    default: false
+  link-prefix:
+    description: 'Text which is added before the jira ticket link'
+    required: false
+    default: 'JIRA Issue: '
 
 runs:
   using: 'node20'

@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-import { GithubPullRequestParams, GithubUpdateIssueParams } from './types';
+import { GithubPullRequestParams, GithubUpdateIssueParams, JiraIssue } from './types';
 import { GitHub } from './github';
 import { Jira } from './jira';
 
@@ -22,6 +22,11 @@ const run = async () => {
 		const failOnError: boolean = core.getInput('fail-on-error', { required: false }) !== 'false';
 		const forceUpdate: boolean = core.getInput('force-update', { required: false }) === 'true';
 		const updateBody: boolean = core.getInput('update-body', { required: false }) === 'true';
+		const includeTitle: boolean = core.getInput('include-title', { required: false }) === 'true';
+		const linkPrefix: string = core.getInput('link-prefix', {
+			required: false,
+			trimWhitespace: false,
+		});
 
 		const exit = (message: string): void => {
 			let exitCode = 0;
@@ -94,31 +99,30 @@ const run = async () => {
 		const issueKey = issueKeys[issueKeys.length - 1];
 		console.log(`JIRA key -> ${issueKey}`);
 
-		let key = '';
-
+		let ticketData: JiraIssue;
 		try {
-			key = (await jira.getIssue(issueKey)).key;
+			ticketData = await jira.getIssue(issueKey);
 		} catch (error) {
 			console.error(`Error while retrieving issue with key ${issueKey} from JIRA: `, error);
 			console.log('Skipping.');
 			return;
 		}
 
+		const {
+			key,
+			fields: { summary },
+		} = ticketData;
+		const linkText = includeTitle ? `${key}: ${summary}` : key;
+		const linkBody =
+			commentHeader + `${linkPrefix}[${linkText}](${jiraBaseURL}/browse/${key})` + commentTrailer;
+
 		if (key) {
 			if (updateBody) {
 				console.log('Successfully retrieved issue from JIRA. Adding link to body of issue.');
-				await gh.updateBody({
-					...commonPayload,
-					body:
-						commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
-				});
+				await gh.updateBody({ ...commonPayload, linkBody });
 			} else {
 				console.log('Successfully retrieved issue from JIRA. Adding link comment for issue.');
-				await gh.addComment({
-					...commonPayload,
-					body:
-						commentHeader + `JIRA Issue: [${key}](${jiraBaseURL}/browse/${key})` + commentTrailer,
-				});
+				await gh.addComment({ ...commonPayload, body: linkBody });
 			}
 		} else {
 			if (!issueKeys.length) {
