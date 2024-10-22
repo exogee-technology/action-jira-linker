@@ -16,6 +16,7 @@ on: [pull_request]
 
 jobs:
   action-jira-linter:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - uses: exogee-technology/action-jira-linker@v1.0.0
@@ -54,14 +55,18 @@ A full example with all available options and example values is provided below.
 ```
 
 | Key               | Description                                                                                                                                                             | Required | Default |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- |
-| `github-token`    | Token used to update PR description. `GITHUB_TOKEN` is already available [when you use GitHub actions][ghtoken], so all that is required is to pass it as a param here. | x        | `null`  |
-| `jira-token`      | Token used to fetch Jira Issue information. Check [below](#jira-token) for more details on how to generate the token.                                                   | x        | `null`  |
-| `jira-user`       | The email address of the user that generated the `jira-token`.                                                                                                          | x        | `null`  |
-| `jira-base-url`   | The subdomain of JIRA cloud that you use to access it. Ex: `https://your-domain.atlassian.net`.                                                                         | x        | `null`  |
-| `comment-header`  | A markdown formatted message which will get added to top of the comments the bot makes.                                                                                 |          | `''`    |
-| `comment-trailer` | A markdown formatted message which will get added to bottom of the comments the bot makes.                                                                              |          | `''`    |
-| `fail-on-error`   | A `Boolean` which, if set to `true`, fails the GitHub Action when an error occurs.                                                                                      |          | `false` |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------------- |
+| `github-token`    | Token used to update PR description. `GITHUB_TOKEN` is already available [when you use GitHub actions][ghtoken], so all that is required is to pass it as a param here. | x        | `null`         |
+| `jira-token`      | Token used to fetch Jira Issue information. Check [below](#jira-token) for more details on how to generate the token.                                                   | x        | `null`         |
+| `jira-user`       | The email address of the user that generated the `jira-token`.                                                                                                          | x        | `null`         |
+| `jira-base-url`   | The subdomain of JIRA cloud that you use to access it. Ex: `https://your-domain.atlassian.net`.                                                                         | x        | `null`         |
+| `comment-header`  | A markdown formatted message which will get added to top of the comments the bot makes.                                                                                 |          | `''`           |
+| `comment-trailer` | A markdown formatted message which will get added to bottom of the comments the bot makes.                                                                              |          | `''`           |
+| `fail-on-error`   | A `Boolean` which, if set to `true`, fails the GitHub Action when an error occurs.                                                                                      |          | `false`        |
+| `force-update`    | A `Boolean` which, if set to `true`, allows the update to be made after the issue has already been opened which may result in creating multiple comments.               |          | `false`        |
+| `update-body`     | A `Boolean` which, if set to `true`, prepends the comment to the body instead of adding a comment to the issue.                                                         |          | `false`        |
+| `include-title`   | A `Boolean` which, if set to `true`, adds the jira ticket title to the generated link.                                                                                  |          | `false`        |
+| `link-prefix`     | Text which is added before the jira ticket link.                                                                                                                        |          | `JIRA Issue: ` |
 
 **Special note on `jira-token`:** Since tokens are private, we suggest adding
 them as [GitHub secrets][secrets].
