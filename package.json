@@ -30,7 +30,7 @@
 		"@actions/core": "1.11.1",
 		"@actions/github": "6.0.0",
 		"@octokit/rest": "21.0.2",
-		"axios": "1.7.7"
+		"axios": "1.7.9"
 	},
 	"devDependencies": {
 		"@types/jest": "29.5.14",
